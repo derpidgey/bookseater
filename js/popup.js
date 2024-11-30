@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const toggle = document.getElementById('link-toggle');
 
   chrome.storage.local.get('defaultToHome', data => {
-    toggle.checked = !!data?.defaultToHome;
+    toggle.checked = !!data.defaultToHome;
   });
 
   toggle.addEventListener('change', () => {

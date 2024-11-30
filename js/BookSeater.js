@@ -37,7 +37,7 @@ class BookSeater {
 
   loadSettings() {
     chrome.storage.local.get([this.key], (data) => {
-      if (data && data[this.key]) {
+      if (data[this.key]) {
         this.settings = { ...this.settings, ...data[this.key] };
       }
       this.settingsLoaded = true;
@@ -248,51 +248,54 @@ class BookSeater {
       upgrades[key] = value.sort((a, b) => b.hours - a.hours);
       upgradesToSkip[key] = 0;
     }
-    let builderHours = page.concurrentBuilderHours * this.settings.builders;
-    let labHours = page.labHours;
-    let simulatedBuilderHours = 0;
-    let simulatedLabHours = 0;
+    const builderHours = page.concurrentBuilderHours * this.settings.builders;
+    const labHours = page.labHours;
     let builderHoursToMax = 0;
     let labHoursToMax = 0;
-    // simulating the days semes to work better than subtracting all the time saves
-    for (let day = 1; builderHours - simulatedBuilderHours > 0 || labHours - simulatedLabHours > 0; ++day) {
-      simulatedBuilderHours += 24 * this.settings.builders + this.settings.builderHelper;
-      simulatedLabHours += 24 + this.settings.labHelper;
-      if (day % 7 === 0) {
+    for (let hour = 1, simulatedBuilderHours = 0, simulatedLabHours = 0;
+      simulatedBuilderHours < builderHours || simulatedLabHours < labHours; ++hour) {
+      simulatedBuilderHours += this.settings.builders;
+      simulatedLabHours += 1;
+      if (hour % 24 === 0) {
+        simulatedBuilderHours += this.settings.builderHelper;
+        simulatedLabHours += this.settings.labHelper;
+      }
+      if (hour % (7 * 24) === 0) {
         if (this.settings.researchPotsEnabled) {
           simulatedLabHours += 69;
         }
       }
-      if (day % 30 === 0) {
+      if (hour % (30 * 24) === 0) {
         Object.keys(upgrades).forEach(key => {
           const books = getMagicItemsPerMonth(this.settings, key);
           for (let i = upgradesToSkip[key]; i < upgradesToSkip[key] + books; ++i) {
             const upgrade = upgrades[key][i];
-            if (upgrade) {
-              const isBuildingOrHeroes = (key === 'building' || key === 'heroes');
-              const isFightingOrSpells = (key === 'fighting' || key === 'spells');
-              const notMaxed = (isBuildingOrHeroes && builderHoursToMax === 0) || (isFightingOrSpells && labHoursToMax === 0);
-              if (notMaxed) {
-                if (isBuildingOrHeroes) simulatedBuilderHours += upgrade.hours;
-                else if (isFightingOrSpells) simulatedLabHours += upgrade.hours;
-                page.highlightedUpgrades.push(upgrade.highlightSelector);
-                this.thresholds[key] = toTimeString(hoursToTime(upgrade.hours));
-              }
+            if (!upgrade) break;
+            const isBuildingOrHeroes = (key === 'building' || key === 'heroes');
+            const isFightingOrSpells = (key === 'fighting' || key === 'spells');
+            const notMaxed = (isBuildingOrHeroes && builderHoursToMax === 0) || (isFightingOrSpells && labHoursToMax === 0);
+            const gettingFullValue = (isBuildingOrHeroes && simulatedBuilderHours + upgrade.hours < builderHours)
+              || (isFightingOrSpells && simulatedLabHours + upgrade.hours < labHours);
+            if (notMaxed && gettingFullValue) {
+              if (isBuildingOrHeroes) simulatedBuilderHours += upgrade.hours;
+              else if (isFightingOrSpells) simulatedLabHours += upgrade.hours;
+              page.highlightedUpgrades.push(upgrade.highlightSelector);
+              this.thresholds[key] = toTimeString(hoursToTime(upgrade.hours));
             }
           }
           upgradesToSkip[key] += books;
         });
       }
-      if (builderHours - simulatedBuilderHours <= 0 && builderHoursToMax === 0) {
-        builderHoursToMax = day * 24 + simulatedBuilderHours - builderHours;
+      if (simulatedBuilderHours >= builderHours && builderHoursToMax === 0) {
+        builderHoursToMax = hour;
       }
-      if (labHours - simulatedLabHours <= 0 && labHoursToMax === 0) {
-        labHoursToMax = day * 24 + simulatedLabHours - labHours;
+      if (simulatedLabHours >= labHours && labHoursToMax === 0) {
+        labHoursToMax = hour;
       }
     }
     return {
-      builder: builderHoursToMax,
-      lab: labHoursToMax
+      builder: builderHours === 0 ? 0 : builderHoursToMax,
+      lab: labHours === 0 ? 0 : labHoursToMax
     };
   }
 }

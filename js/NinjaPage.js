@@ -16,7 +16,7 @@ class NinjaPage {
     this.processing = false;
     this.reset();
     for (let { name } of Object.values(NinjaPage.#tabConfig)) {
-      document.getElementById(`tablink${name}`).addEventListener('click', async () => {
+      document.getElementById(`tablink${name}`)?.addEventListener('click', async () => {
         await this.tabIsLoaded(name);
         this.highlightedUpgrades.forEach(x => {
           const element = document.querySelector(x);
@@ -44,7 +44,9 @@ class NinjaPage {
     this.reset();
     this.processing = true;
     for (let { name } of Object.values(NinjaPage.#tabConfig)) {
-      document.getElementById(`tablink${name}`).click();
+      const tabLink = document.getElementById(`tablink${name}`);
+      if (!tabLink) continue;
+      tabLink.click();
       await this.tabIsLoaded(name);
       this.processTab(name, settings);
     }
