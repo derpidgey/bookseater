@@ -83,6 +83,8 @@ class BookSeater {
         <label for="numBuilders">Builders</label>
       </div>
       <div id="process" class="button small radius">Process</div>
+      <br>
+      <div id="drag-me" class="button small radius">Enable Drag</div>
       <h4>Monthly</h4>
       <label>
         <input id="goldPassToggle" type="checkbox" ${this.settings.passType.includes('gold') ? 'checked' : ''}> Gold Pass
@@ -111,7 +113,6 @@ class BookSeater {
       <div id="tableContainer"></div>
     `;
     document.body.appendChild(ui);
-    // makeDraggable(ui);
     document.getElementById('superchargeToggle').addEventListener('change', ({ target }) => {
       this.settings.includeSupercharge = target.checked;
       this.saveSettings();
@@ -182,6 +183,9 @@ class BookSeater {
     });
     this.checkTheme();
     document.getElementById('chkCSSSwitch').addEventListener('change', () => this.checkTheme());
+    document.getElementById('drag-me').addEventListener('click', () => {
+      makeDraggable(ui);
+    });
   }
 
   checkTheme() {

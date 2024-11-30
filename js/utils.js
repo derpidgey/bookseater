@@ -40,6 +40,10 @@ function hoursToTime(hours) {
 }
 
 function makeDraggable(element) {
+  if (element.classList.contains('draggable')) {
+    return;
+  }
+  element.classList.add('draggable')
   element.style.cursor = 'move';
   element.style.userSelect = 'none';
   element.addEventListener('mousedown', event => {
