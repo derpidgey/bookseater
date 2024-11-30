@@ -23,9 +23,12 @@ class BookSeater {
   }
 
   getAccountIdFromURL() {
-    const regex = /\/upgrade-tracker\/([a-zA-Z0-9]+)\/home/;
-    const match = window.location.pathname.match(regex);
-    return match ? match[1] : null;
+    const pathParts = window.location.pathname.split('/');
+    const upgradeTrackerIndex = pathParts.indexOf('upgrade-tracker');
+    if (upgradeTrackerIndex !== -1 && pathParts[upgradeTrackerIndex + 1]) {
+      return pathParts[upgradeTrackerIndex + 1];
+    }
+    return null;
   }
 
   saveSettings() {
@@ -99,7 +102,7 @@ class BookSeater {
       </div>
       <h4>Weekly</h4>
       <label>
-        <input id="researchPotsToggle" type="checkbox" ${this.settings.researchPotsEnabled ? 'checked' : ''}> 3 Research Pots
+        <input id="researchPotsToggle" type="checkbox" ${this.settings.researchPotsEnabled ? 'checked' : ''}> 3 Research Potions
       </label>
       <h4>Daily</h4>
       <div class="input-row">

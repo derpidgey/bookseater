@@ -1,15 +1,15 @@
 class NinjaPage {
   static #tabConfig = {
-    defences: { name: 'defences', book: 'building' },
-    traps: { name: 'traps', book: 'building' },
-    army: { name: 'army', book: 'building' },
-    resources: { name: 'resources', book: 'building' },
-    troops: { name: 'troops', book: 'fighting' },
-    spells: { name: 'spells', book: 'spells' },
-    darktroops: { name: 'darktroops', book: 'fighting' },
-    siegemachines: { name: 'siegemachines', book: 'fighting' },
-    heroes: { name: 'heroes', book: 'heroes' },
-    stats: { name: 'stats', book: 'NA' }
+    defences: { name: 'defences', book: 'building', tabLoadedSelector: '#defences .overview-table' },
+    traps: { name: 'traps', book: 'building', tabLoadedSelector: '#traps .overview-table' },
+    army: { name: 'army', book: 'building', tabLoadedSelector: '#army .overview-table' },
+    resources: { name: 'resources', book: 'building', tabLoadedSelector: '#resources .overview-table' },
+    troops: { name: 'troops', book: 'fighting', tabLoadedSelector: '#troops .overview-table' },
+    spells: { name: 'spells', book: 'spells', tabLoadedSelector: '#spells .overview-table' },
+    darktroops: { name: 'darktroops', book: 'fighting', tabLoadedSelector: '#darktroops .overview-table' },
+    siegemachines: { name: 'siegemachines', book: 'fighting', tabLoadedSelector: '#siegemachines .overview-table' },
+    heroes: { name: 'heroes', book: 'heroes', tabLoadedSelector: '#heroes .overview-table' },
+    stats: { name: 'stats', book: 'NA', tabLoadedSelector: '#grandTotalHBuilderTime tr:last-child td:nth-child(2)' }
   }
 
   constructor() {
@@ -54,8 +54,7 @@ class NinjaPage {
   tabIsLoaded(tabName) {
     return new Promise(resolve => {
       const intervalId = setInterval(() => {
-        const element = tabName === NinjaPage.#tabConfig.stats.name ? document.querySelector('#grandTotalHBuilderTime tr:last-child td:nth-child(2)') : document.querySelector(`#${tabName} .overview-table`);
-        if (element) {
+        if (document.querySelector(NinjaPage.#tabConfig[tabName].tabLoadedSelector)) {
           clearInterval(intervalId);
           resolve();
         }
@@ -79,12 +78,11 @@ class NinjaPage {
     } else {
       const bookType = NinjaPage.#tabConfig[tabName].book;
       if (!bookType) return;
-      document.querySelectorAll(`#${tabName} .future-upgrade-time`).forEach(x => {
-        const tabId = x.closest('.tabs-panel.is-active').id;
-        const upgradeId = x.parentElement.children[0].id;
+      document.querySelectorAll(`#${tabName} .future-upgrade-time`).forEach(futureUpgradeTime => {
+        const upgradeId = futureUpgradeTime.parentElement.children[0].id;
         this.upgrades[bookType].push({
-          highlightSelector: `#${tabId} #${upgradeId}`,
-          hours: toHours(stringToTime(x.textContent.trim()))
+          highlightSelector: `#${tabName} #${upgradeId}`,
+          hours: toHours(stringToTime(futureUpgradeTime.textContent.trim()))
         });
       });
     }
