@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Bookseater",
+  "version": "1.0",
+  "description": "Factor in the books. Extension for Clash Ninja.",
+  "permissions": [
+    "storage"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icons/icon48.png"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "background": {
+    "service_worker": "js/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.clash.ninja/upgrade-tracker/*/home"],
+      "js": ["js/utils.js", "js/NinjaPage.js", "js/BookSeater.js", "js/content.js"],
+      "css": ["css/bookseater.css"]
+    },
+    {
+      "matches": ["https://www.clash.ninja/*"],
+      "js": ["js/linkAppender.js"]
+    }
+  ],
+  "host_permissions": ["https://www.clash.ninja/*"]
+}

@@ -1,0 +1,58 @@
+:root {
+  --bookseater-width: 250px;
+  --bookseater-height: 300px;
+}
+
+#bookseater {
+  position: fixed;
+  top: calc(100vh - var(--bookseater-height) - 20px);
+  left: calc(100vw - var(--bookseater-width) - 20px);
+  width: var(--bookseater-width);
+  height: var(--bookseater-height);
+  background-color: white;
+  border: 1px solid black;
+  z-index: 69;
+  text-align: center;
+  overflow-y: scroll;
+}
+
+#bookseater.dark {
+  background-color: #14253D;
+}
+
+#bookseater>label {
+  display: initial;
+}
+
+#bookseater [type='checkbox'] {
+  width: 18px;
+  height: 18px;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.input-row input {
+  width: 60px;
+  margin: 0;
+  margin-left: 20px;
+  height: auto;
+  padding: 0
+}
+
+.input-row select {
+  width: 60px;
+  margin: 0;
+  margin-left: 20px;
+}
+
+.input-row label {
+  margin-left: 8px;
+}
+
+#tableContainer {
+  color: #0a0a0a;
+}

@@ -1,0 +1,86 @@
+/* Thank you chat gpt for the styles */
+body {
+  width: 250px;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  margin: 0;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  font-size: 18px;
+  margin: 0 0 10px 0;
+  color: #333;
+  text-align: center;
+}
+
+/* Style for the toggle section */
+.toggle-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+label {
+  font-size: 14px;
+  color: #555;
+}
+
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Styling buttons */
+button {
+  background-color: #4078c0;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #14679e;
+}
+
+/* Input fields and other interactive elements */
+input[type="text"], select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+/* Style for links, if any */
+a {
+  color: #1a73e8;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Space between elements */
+.space {
+  margin-bottom: 10px;
+}
+
+/* Container for the entire popup */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
