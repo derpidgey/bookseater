@@ -29,12 +29,12 @@ class BookSeater {
   }
 
   saveSettings() {
-    chrome.storage.sync.set({ [this.key]: this.settings });
+    chrome.storage.local.set({ [this.key]: this.settings });
   }
 
   loadSettings() {
-    chrome.storage.sync.get([this.key], (data) => {
-      if (data[this.key]) {
+    chrome.storage.local.get([this.key], (data) => {
+      if (data && data[this.key]) {
         this.settings = { ...this.settings, ...data[this.key] };
       }
       this.settingsLoaded = true;
