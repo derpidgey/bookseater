@@ -18,10 +18,6 @@ class BookSeater {
     this.loadSettings();
   }
 
-  reset() {
-    this.thresholds = {};
-  }
-
   getAccountIdFromURL() {
     const pathParts = window.location.pathname.split('/');
     const upgradeTrackerIndex = pathParts.indexOf('upgrade-tracker');
@@ -33,6 +29,8 @@ class BookSeater {
 
   saveSettings() {
     chrome.storage.local.set({ [this.key]: this.settings });
+    this.thresholds = {};
+    page.reset();
   }
 
   loadSettings() {
@@ -119,31 +117,23 @@ class BookSeater {
     document.getElementById('superchargeToggle').addEventListener('change', ({ target }) => {
       this.settings.includeSupercharge = target.checked;
       this.saveSettings();
-      this.reset();
-      page.reset();
     });
     document.getElementById('numBuilders').addEventListener('change', ({ target }) => {
       const n = parseInt(target.value, 10);
       if (!isNaN(n)) {
         this.settings.builders = n;
         this.saveSettings();
-        this.reset();
-        page.reset();
       }
     });
     document.getElementById('goldPassToggle').addEventListener('change', ({ target }) => {
       this.settings.passType = target.checked ? 'goldPass' : 'peasantPass';
       this.saveSettings();
-      this.reset();
-      page.reset();
     });
     document.getElementById('hobInput').addEventListener('input', ({ target }) => {
       const hammers = parseInt(target.value, 10);
       if (!isNaN(hammers)) {
         this.settings.hammers.building = hammers;
         this.saveSettings();
-        this.reset();
-        page.reset();
       }
     });
     document.getElementById('hofInput').addEventListener('input', ({ target }) => {
@@ -151,23 +141,17 @@ class BookSeater {
       if (!isNaN(hammers)) {
         this.settings.hammers.fighting = hammers;
         this.saveSettings();
-        this.reset();
-        page.reset();
       }
     });
     document.getElementById('researchPotsToggle').addEventListener('change', ({ target }) => {
       this.settings.researchPotsEnabled = target.checked;
       this.saveSettings();
-      this.reset();
-      page.reset();
     });
     document.getElementById('builderHelper').addEventListener('change', ({ target }) => {
       const level = parseInt(target.value, 10);
       if (!isNaN(level)) {
         this.settings.builderHelper = level;
         this.saveSettings();
-        this.reset();
-        page.reset();
       }
     });
     document.getElementById('labHelper').addEventListener('change', ({ target }) => {
@@ -175,8 +159,6 @@ class BookSeater {
       if (!isNaN(level)) {
         this.settings.labHelper = level;
         this.saveSettings();
-        this.reset();
-        page.reset();
       }
     });
     document.getElementById('process').addEventListener('click', async () => {
@@ -202,8 +184,6 @@ class BookSeater {
 
   update(page) {
     const { builder, lab } = this.calculateTimeToMaxAfterSavings(page);
-    const calculatedBuilderTime = hoursToTime(builder);
-    const calculatedLabTime = hoursToTime(lab);
     const tableContainer = document.getElementById('tableContainer');
     tableContainer.innerHTML = `
     <table class="overview-table" cellspacing="0" rules="rows" border="1">
@@ -214,11 +194,11 @@ class BookSeater {
         </tr>
         <tr>
           <td>Builder Time</td>
-          <td>${toTimeString(calculatedBuilderTime)}</td>
+          <td>${toTimeString(hoursToTime(builder))}</td>
         </tr>
         <tr>
           <td>Lab Time</td>
-          <td>${toTimeString(calculatedLabTime)}</td>
+          <td>${toTimeString(hoursToTime(lab))}</td>
         </tr>
       </tbody>
     </table>
@@ -233,8 +213,7 @@ class BookSeater {
             <td>${key.charAt(0).toUpperCase()}${key.slice(1)}</td>
             <td>${value}</td>
           </tr>
-        `).join('')
-      }
+        `).join('')}
       </tbody>
     </table>
     `;

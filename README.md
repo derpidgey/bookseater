@@ -1,9 +1,8 @@
 # **Bookseater Installation Guide**
 
 ## **Supported Browsers**
-This extension has been **tested in Google Chrome** and **Firefox**, but **probably works** in other Chromium-based browsers such as:
+This extension has been **tested in Google Chrome**, **Microsoft Edge** and **Firefox**, but **probably works** in other Chromium-based browsers such as:
 
-- **Microsoft Edge**
 - **Brave**
 - **Opera**
 

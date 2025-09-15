@@ -68,7 +68,7 @@ class NinjaPage {
     if (tabName === NinjaPage.#tabConfig.stats.name) {
       let builderElement;
       if (settings.includeSupercharge) {
-        builderElement = document.querySelector('#pnlSuperchargeTotal #grand-total-table:nth-child(2) tr:last-child td:nth-child(2)');
+        builderElement = document.querySelector('#pnlSuperchargeTotal #grand-total-table tbody tr:last-child td:nth-child(2)');
       } else {
         builderElement = document.querySelector(`#grandTotalHBuilderTime tr:nth-child(${settings.builders}) td:nth-child(2)`);
       }
